@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import Aux from '../../hoc/Aux';
+import Auxiliary from '../../hoc/Auxiliary';
 import Burger from '../../components/Burger/Burger'
 import BurgerPurchaseOrders from '../../components/Burger/BurgerPurchaseOrders/BurgerPurchaseOrders'
 import TopingsContext from '../../context/TopingsContext'
@@ -70,7 +70,7 @@ class BurgerBuilder extends Component{
     }
 
     return (
-      <Aux>
+      <Auxiliary>
         <TopingsContext.Provider value={{changeToping: this.changeToping, disableInfo: disableInfo, purchasingOrder:this.purchasingOrder}} >
           <Modal show={this.state.purchasing}>
             <OrderSummary 
@@ -86,7 +86,7 @@ class BurgerBuilder extends Component{
               purchasingOrder={this.purchasingOrder}
             />
         </TopingsContext.Provider>
-      </Aux>
+      </Auxiliary>
     );
   }
 }
