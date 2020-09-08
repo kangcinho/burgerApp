@@ -64,6 +64,7 @@ class BurgerBuilder extends Component{
   }
   
   render(){
+    console.log("[BurgerBuilder.js] Render")
     const disableInfo = {...this.state.topings};
     for(let key in disableInfo){
       disableInfo[key] = disableInfo[key] <= 0
@@ -82,11 +83,11 @@ class BurgerBuilder extends Component{
               />
           </Modal>
           <Burger topings={this.state.topings}/>
-            <BurgerPurchaseOrders 
-              price={this.state.totalPrices}
-              disablePurchase={this.state.disablePurchase}
-              purchasingOrder={this.purchasingOrder}
-            />
+          <BurgerPurchaseOrders 
+            price={this.state.totalPrices}
+            disablePurchase={this.state.disablePurchase}
+            purchasingOrder={this.purchasingOrder}
+          />
         </TopingsContext.Provider>
       </Auxiliary>
     );

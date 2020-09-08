@@ -19,6 +19,7 @@ class Layout extends Component {
   }
 
   render(){
+    console.log("[Layout.js] Render")
     return (
       <Auxiliary>
         <Toolbar openSidebar={this.toggleSideDrawer}/>
