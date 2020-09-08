@@ -7,7 +7,7 @@ import Backdrop from '../Backdrop/Backdrop'
 const Modal = (props) => {
   return (
     <Auxiliary>
-      <Backdrop show={props.show} />
+      <Backdrop show={props.show} backdropClicked={props.purchasingOrder}/>
       <div 
         className={classes.Modal}
         style={{

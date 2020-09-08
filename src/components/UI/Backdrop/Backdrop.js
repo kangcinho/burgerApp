@@ -1,13 +1,10 @@
-import React, { useContext } from 'react'
+import React from 'react'
 
 import classes from './Backdrop.css'
-import TopingsContext from '../../../context/TopingsContext'
 
 const Backdrop = (props) => {
-  const topingContext = useContext(TopingsContext);
-
   return (
-    props.show ? <div className={classes.Backdrop} onClick={() => topingContext.purchasingOrder(false)}></div> : null
+    props.show ? <div className={classes.Backdrop} onClick={() => props.backdropClicked(false)}></div> : null
   )
 }
 

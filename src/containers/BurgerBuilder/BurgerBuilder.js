@@ -72,7 +72,7 @@ class BurgerBuilder extends Component{
     return (
       <Auxiliary>
         <TopingsContext.Provider value={{changeToping: this.changeToping, disableInfo: disableInfo, purchasingOrder:this.purchasingOrder}} >
-          <Modal show={this.state.purchasing}>
+          <Modal show={this.state.purchasing} purchasingOrder={this.purchasingOrder}>
             <OrderSummary 
               topings={this.state.topings}
               price={this.state.totalPrices}
