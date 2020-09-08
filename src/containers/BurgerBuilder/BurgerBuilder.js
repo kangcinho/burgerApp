@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import Auxiliary from '../../hoc/Auxiliary';
+import Auxiliary from '../../hoc/Auxiliary/Auxiliary';
 import Burger from '../../components/Burger/Burger'
 import BurgerPurchaseOrders from '../../components/Burger/BurgerPurchaseOrders/BurgerPurchaseOrders'
 import TopingsContext from '../../context/TopingsContext'
