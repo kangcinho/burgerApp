@@ -77,7 +77,9 @@ class BurgerBuilder extends Component{
               topings={this.state.topings}
               price={this.state.totalPrices}
               purchasingOrder={this.purchasingOrder}
-              purchasingContinue={this.purchasingContinue}/>
+              purchasingContinue={this.purchasingContinue}
+              // rerender={this.state.purchasing}
+              />
           </Modal>
           <Burger topings={this.state.topings}/>
             <BurgerPurchaseOrders 
