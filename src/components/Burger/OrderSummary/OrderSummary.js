@@ -5,14 +5,11 @@ import Button from '../../UI/Button/Button'
 
 
 class OrderSummary extends Component {
-  // shouldComponentUpdate(nextProps, nextState){
-  //   if(nextProps.rerender){
-  //     console.log("[OrderSummary.js] shouldComponentUpdate", nextProps.rerender)
-  //     return true
-  //   }
-  //   console.log("[OrderSummary.js] shouldComponentUpdate", nextProps.rerender)
-  //   return false
-  // }
+  
+  shouldComponentUpdate(nextProps, nextState){
+    console.log("[OrderSummary.js] shouldComponentUpdate", nextProps.rerender !== this.props.rerender)
+    return nextProps.rerender !== this.props.rerender
+  }
 
   render(){
     console.log("[OrderSummary.js] Render")

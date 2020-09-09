@@ -6,6 +6,8 @@ import BurgerPurchaseOrders from '../../components/Burger/BurgerPurchaseOrders/B
 import TopingsContext from '../../context/TopingsContext'
 import Modal from '../../components/UI/Modal/Modal'
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary'
+import axios from '../../axiosConfig'
+import Spinner from '../../components/UI/Spinner/Spinner'
 
 const TOPINGS_PRICE = {
   salad: 0.54,
@@ -24,7 +26,8 @@ class BurgerBuilder extends Component{
     },
     totalPrices: 0.0,
     disablePurchase: true,
-    purchasing: false
+    purchasing: false,
+    loading: false
   }
   
   changeToping = (type, more) => {
@@ -59,8 +62,30 @@ class BurgerBuilder extends Component{
 
   purchasingContinue = () => {
     // console.log("purchasingContinue")
-    alert("Purchasing Continue!")
-    this.purchasingOrder(false)
+    // alert("Purchasing Continue!")
+    this.setState({loading: true})
+    const orders = {
+      topings: this.state.topings,
+      price: this.state.totalPrices,
+      customer:{
+        name: 'Agus Setiawan',
+        address: {
+          name: 'Jalan Susuku',
+          nomor: '120x'
+        },
+        email: 'kangcinho@gmail.com'
+      }
+    }
+    axios.post('orders.json', orders)
+      .then( (respon) => {
+        console.log(respon)
+        this.purchasingOrder(false)
+        this.setState({loading: false})
+      })
+      .catch( (error) => {
+        console.log(error)
+        this.setState({loading: false})
+      })
   }
   
   render(){
@@ -70,17 +95,23 @@ class BurgerBuilder extends Component{
       disableInfo[key] = disableInfo[key] <= 0
     }
 
+    let orderSummary = (
+      <OrderSummary 
+        topings={this.state.topings}
+        price={this.state.totalPrices}
+        purchasingOrder={this.purchasingOrder}
+        purchasingContinue={this.purchasingContinue}
+        rerender={this.state.purchasing}
+        />
+    )
+    if(this.state.loading){
+      orderSummary = <Spinner />
+    }
     return (
       <Auxiliary>
         <TopingsContext.Provider value={{changeToping: this.changeToping, disableInfo: disableInfo, purchasingOrder:this.purchasingOrder}} >
           <Modal show={this.state.purchasing} purchasingOrder={this.purchasingOrder}>
-            <OrderSummary 
-              topings={this.state.topings}
-              price={this.state.totalPrices}
-              purchasingOrder={this.purchasingOrder}
-              purchasingContinue={this.purchasingContinue}
-              // rerender={this.state.purchasing}
-              />
+            {orderSummary}
           </Modal>
           <Burger topings={this.state.topings}/>
           <BurgerPurchaseOrders 
