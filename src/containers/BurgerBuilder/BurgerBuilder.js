@@ -8,7 +8,7 @@ import Modal from '../../components/UI/Modal/Modal'
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary'
 import axios from '../../axiosConfig'
 import Spinner from '../../components/UI/Spinner/Spinner'
-
+import errorHandler from '../../hoc/ErrorHandler/ErrorHandler'
 const TOPINGS_PRICE = {
   salad: 0.54,
   meat: 0.71,
@@ -125,4 +125,4 @@ class BurgerBuilder extends Component{
   }
 }
 
-export default BurgerBuilder;
+export default errorHandler(BurgerBuilder, axios);
