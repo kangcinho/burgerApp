@@ -9,6 +9,7 @@ import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary'
 import axios from '../../axiosConfig'
 import Spinner from '../../components/UI/Spinner/Spinner'
 import errorHandler from '../../hoc/ErrorHandler/ErrorHandler'
+
 const TOPINGS_PRICE = {
   salad: 0.54,
   meat: 0.71,
@@ -18,16 +19,12 @@ const TOPINGS_PRICE = {
 
 class BurgerBuilder extends Component{
   state = {
-    topings: {
-      salad: 0,
-      meat: 0,
-      cheese: 0,
-      bacon: 0
-    },
+    topings: null,
     totalPrices: 0.0,
     disablePurchase: true,
     purchasing: false,
-    loading: false
+    loading: false,
+    errorGetData: false
   }
   
   changeToping = (type, more) => {
@@ -88,22 +85,61 @@ class BurgerBuilder extends Component{
       })
   }
   
+  componentDidMount(){
+    console.log("BurgerBuilder.js componentDidMount")
+    axios.get('https://burgerapp-8ea80.firebaseio.com/topings.json')
+      .then( (respons) => {
+        const topings = respons.data
+        const totalPrice =  Object.keys(topings).map( (toping) => {
+          return topings[toping] * TOPINGS_PRICE[toping]
+        }).reduce( (firstEl, nextEl) =>{
+          return firstEl + nextEl
+        })
+
+        console.log(totalPrice)
+        this.setState({
+          topings: respons.data,
+          totalPrices: totalPrice
+        })
+      })
+      .catch( (error) => {
+        this.setState({
+          errorGetData: true
+        })
+      })
+  }
   render(){
     console.log("[BurgerBuilder.js] Render")
     const disableInfo = {...this.state.topings};
     for(let key in disableInfo){
       disableInfo[key] = disableInfo[key] <= 0
     }
+    let orderSummary = null;
 
-    let orderSummary = (
-      <OrderSummary 
-        topings={this.state.topings}
-        price={this.state.totalPrices}
-        purchasingOrder={this.purchasingOrder}
-        purchasingContinue={this.purchasingContinue}
-        rerender={this.state.purchasing}
-        />
-    )
+    let burgerContainer = this.state.errorGetData ? <p>Toping Burger Gagal di Load!</p>: <Spinner/>;
+
+    if(this.state.topings){
+      burgerContainer = (
+        <Auxiliary>
+          <Burger topings={this.state.topings}/>
+          <BurgerPurchaseOrders 
+            price={this.state.totalPrices}
+            disablePurchase={this.state.disablePurchase}
+            purchasingOrder={this.purchasingOrder}
+          />
+        </Auxiliary>
+      )
+      orderSummary = (
+        <OrderSummary 
+          topings={this.state.topings}
+          price={this.state.totalPrices}
+          purchasingOrder={this.purchasingOrder}
+          purchasingContinue={this.purchasingContinue}
+          rerender={this.state.purchasing}
+          />
+      )
+    }
+
     if(this.state.loading){
       orderSummary = <Spinner />
     }
@@ -113,12 +149,7 @@ class BurgerBuilder extends Component{
           <Modal show={this.state.purchasing} purchasingOrder={this.purchasingOrder}>
             {orderSummary}
           </Modal>
-          <Burger topings={this.state.topings}/>
-          <BurgerPurchaseOrders 
-            price={this.state.totalPrices}
-            disablePurchase={this.state.disablePurchase}
-            purchasingOrder={this.purchasingOrder}
-          />
+          {burgerContainer}
         </TopingsContext.Provider>
       </Auxiliary>
     );
